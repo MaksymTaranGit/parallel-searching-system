@@ -5,4 +5,10 @@ dist/
 .DS_Store
 *.log
 .idea/
+build/
+cmake-build-*/
+data/
 .vscode/
+*.exe
+*.o
+*.out

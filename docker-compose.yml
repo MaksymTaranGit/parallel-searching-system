@@ -1,0 +1,58 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: search-ollama
+    volumes:
+      - ollama_models:/root/.ollama
+    networks:
+      - search-network
+    restart: unless-stopped
+
+  ollama-init:
+    image: ollama/ollama:latest
+    container_name: search-ollama-init
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        echo "Waiting for Ollama server..."
+        until ollama list > /dev/null 2>&1; do
+          sleep 1
+        done
+        echo "Pulling model qwen2.5:0.5b..."
+        ollama pull qwen2.5:0.5b
+        echo "Model is ready."
+    networks:
+      - search-network
+    restart: "no"
+
+  search-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: search-server
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+      - OLLAMA_URL=http://ollama:11434
+      - OLLAMA_MODEL=qwen2.5:0.5b
+      - DATASET_PATH=/app/data
+    volumes:
+      - ./data:/app/data:ro
+    depends_on:
+      - ollama
+    networks:
+      - search-network
+    restart: unless-stopped
+
+networks:
+  search-network:
+    driver: bridge
+
+volumes:
+  ollama_models:
