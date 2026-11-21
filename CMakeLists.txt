@@ -8,6 +8,18 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(Threads REQUIRED)
 include(FetchContent)
 
+find_path(ASIO_INCLUDE_DIR asio.hpp)
+if(NOT ASIO_INCLUDE_DIR)
+    FetchContent_Declare(
+        asio
+        GIT_REPOSITORY https://github.com/chriskohlhoff/asio.git
+        GIT_TAG asio-1-30-2
+        GIT_SHALLOW TRUE
+    )
+    FetchContent_MakeAvailable(asio)
+    set(ASIO_INCLUDE_DIR "${asio_SOURCE_DIR}/asio/include" CACHE PATH "" FORCE)
+endif()
+
 set(CROW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(CROW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 FetchContent_Declare(
@@ -37,6 +49,7 @@ FetchContent_MakeAvailable(Crow nlohmann_json httplib)
 
 add_executable(search_server
     src/main.cpp
+    src/core/thread_pool.cpp
     src/nlp/ollama_client.cpp
 )
 
@@ -53,4 +66,9 @@ target_link_libraries(search_server PRIVATE
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(search_server PRIVATE -Wall -Wextra -Wpedantic)
+elseif(MSVC)
+    target_compile_options(search_server PRIVATE /utf-8)
+endif()
+if(WIN32)
+    target_compile_definitions(search_server PRIVATE _WIN32_WINNT=0x0A00)
 endif()

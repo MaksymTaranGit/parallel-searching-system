@@ -1,7 +1,9 @@
 build/
+out/
 cmake-build-*/
 data/
 docs/
 .git/
 .gitignore
 README.md
+.vs/
