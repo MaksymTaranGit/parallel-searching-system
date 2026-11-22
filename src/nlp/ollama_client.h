@@ -10,10 +10,10 @@ class OllamaClient {
 
   bool ping() const;
 
-  std::vector<std::string> expand_query(const std::string& query);
+  std::vector<std::string> expand_query(const std::string& query) const;
 
  private:
   std::string base_url_;
   std::string model_name_;
-  std::mutex llm_mutex_;
+  mutable std::mutex llm_mutex_;
 };
