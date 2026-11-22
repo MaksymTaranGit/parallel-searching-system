@@ -53,6 +53,7 @@ add_executable(search_server
     src/core/hash_table.cpp
     src/core/index_shard.cpp
     src/core/inverted_index.cpp
+    src/nlp/tokenizer.cpp
     src/nlp/ollama_client.cpp
 )
 
