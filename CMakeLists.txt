@@ -51,6 +51,8 @@ add_executable(search_server
     src/main.cpp
     src/core/thread_pool.cpp
     src/core/hash_table.cpp
+    src/core/index_shard.cpp
+    src/core/inverted_index.cpp
     src/nlp/ollama_client.cpp
 )
 
