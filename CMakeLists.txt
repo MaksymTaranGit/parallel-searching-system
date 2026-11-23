@@ -55,6 +55,7 @@ add_executable(search_server
     src/core/inverted_index.cpp
     src/nlp/tokenizer.cpp
     src/nlp/ollama_client.cpp
+    src/engine/search_engine.cpp
 )
 
 target_include_directories(search_server PRIVATE
