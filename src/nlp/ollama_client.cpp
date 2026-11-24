@@ -109,8 +109,8 @@ std::vector<std::string> parse_expanded_terms(const std::string& llm_response) {
 
 }  // namespace
 
-OllamaClient::OllamaClient(std::string base_url, std::string model_name)
-    : base_url_(std::move(base_url)), model_name_(std::move(model_name)) {}
+OllamaClient::OllamaClient(std::string base_url, std::string model_name, int lock_timeout_ms)
+    : base_url_(std::move(base_url)), model_name_(std::move(model_name)), lock_timeout_ms_(lock_timeout_ms) {}
 
 bool OllamaClient::ping() const {
   httplib::Client client(base_url_);
@@ -126,7 +126,14 @@ std::vector<std::string> OllamaClient::expand_query(const std::string& query) co
     return {};
   }
 
-  std::lock_guard<std::mutex> lock(llm_mutex_);
+  std::unique_lock<std::timed_mutex> lock(llm_mutex_, std::defer_lock);
+  if (lock_timeout_ms_ > 0) {
+    if (!lock.try_lock_for(std::chrono::milliseconds(lock_timeout_ms_))) {
+      return {};
+    }
+  } else {
+    lock.lock();
+  }
 
   httplib::Client client(base_url_);
   client.set_connection_timeout(5, 0);

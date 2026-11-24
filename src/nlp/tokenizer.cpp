@@ -37,8 +37,7 @@ void extract_tokens(std::string_view text, const HashTable<int>& stop_words, Cal
   word.reserve(32);
 
   auto flush_word = [&]() {
-    if (word.size() >= min_token_length && word.size() <= max_token_length &&
-        stop_words.find(word) == nullptr) {
+    if (word.size() >= min_token_length && word.size() <= max_token_length && stop_words.find(word) == nullptr) {
       on_token(word);
     }
     word.clear();

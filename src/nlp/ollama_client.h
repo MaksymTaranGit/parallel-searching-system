@@ -6,7 +6,8 @@
 
 class OllamaClient {
  public:
-  explicit OllamaClient(std::string base_url, std::string model_name);
+  static constexpr int default_lock_timeout_ms = 15000;
+  explicit OllamaClient(std::string base_url, std::string model_name, int lock_timeout_ms = default_lock_timeout_ms);
 
   bool ping() const;
 
@@ -15,5 +16,6 @@ class OllamaClient {
  private:
   std::string base_url_;
   std::string model_name_;
-  mutable std::mutex llm_mutex_;
+  int lock_timeout_ms_;
+  mutable std::timed_mutex llm_mutex_;
 };

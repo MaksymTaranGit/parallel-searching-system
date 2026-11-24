@@ -1,26 +1,49 @@
 #include "api/server_controller.h"
 
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <thread>
 #include <utility>
 
+namespace {
+
+std::size_t resolve_ws_pool_size() {
+  const std::size_t hw = std::thread::hardware_concurrency();
+  return std::max<std::size_t>(4, hw);
+}
+
+}
+
 ServerController::ServerController(std::shared_ptr<SearchEngine> engine, std::string dataset_path)
-    : engine_(std::move(engine)), dataset_path_(std::move(dataset_path)) {}
+    : engine_(std::move(engine)),
+      dataset_path_(std::move(dataset_path)),
+      ws_pool_(resolve_ws_pool_size()) {}
 
 void ServerController::register_routes() {
-  CROW_ROUTE(app_, "/api/health").methods(crow::HTTPMethod::GET)(
-    [this]() { return handle_health(); });
+  CROW_ROUTE(app_, "/api/health")
+      .methods(crow::HTTPMethod::GET)([this]() { return handle_health(); });
 
-  CROW_ROUTE(app_, "/api/index").methods(crow::HTTPMethod::POST)(
-    [this](const crow::request& req) { return handle_index(req); });
+  CROW_ROUTE(app_, "/api/index")
+      .methods(crow::HTTPMethod::POST)(
+          [this](const crow::request& req) { return handle_index(req); });
 
-  CROW_ROUTE(app_, "/api/search").methods(crow::HTTPMethod::POST)(
-    [this](const crow::request& req) { return handle_search(req); });
+  CROW_ROUTE(app_, "/api/search")
+      .methods(crow::HTTPMethod::POST)(
+          [this](const crow::request& req) { return handle_search(req); });
 
-  CROW_ROUTE(app_, "/api/stats").methods(crow::HTTPMethod::GET)(
-    [this]() { return handle_stats(); });
-} 
+  CROW_ROUTE(app_, "/api/stats")
+      .methods(crow::HTTPMethod::GET)([this]() { return handle_stats(); });
+
+  CROW_WEBSOCKET_ROUTE(app_, "/ws/search")
+      .onopen([this](crow::websocket::connection& conn) { handle_ws_open(conn); })
+      .onclose([this](crow::websocket::connection& conn, auto&&...) {
+        handle_ws_close(conn);
+      })
+      .onmessage([this](crow::websocket::connection& conn, const std::string& data, bool is_binary) {
+        handle_ws_message(conn, data, is_binary);
+      });
+}
 
 void ServerController::run(int port) {
   app_.port(static_cast<std::uint16_t>(port)).multithreaded().run();
@@ -94,17 +117,8 @@ crow::response ServerController::handle_search(const crow::request& req) const {
 
   const SearchResult result = engine_->search(query, mode);
 
-  nlohmann::json results_json = nlohmann::json::array();
-  for (const DocMatch& match : result.results) {
-    results_json.push_back({
-        {"doc_id", match.doc_id},
-        {"score", match.score},
-        {"snippet", match.snippet}
-    });
-  }
-
   nlohmann::json body = {
-      {"results", std::move(results_json)},
+      {"results", matches_to_json(result.results)},
       {"time_ms", result.time_ms}
   };
 
@@ -123,6 +137,87 @@ crow::response ServerController::handle_stats() const {
       {"threads_used", stats.threads_used}
   };
   return json_response(200, body);
+}
+
+void ServerController::handle_ws_open(crow::websocket::connection& conn) {
+  std::lock_guard<std::mutex> lock(ws_mtx_);
+  active_ws_connections_.insert(&conn);
+}
+
+void ServerController::handle_ws_close(crow::websocket::connection& conn) {
+  std::lock_guard<std::mutex> lock(ws_mtx_);
+  active_ws_connections_.erase(&conn);
+}
+
+void ServerController::handle_ws_message(crow::websocket::connection& conn, const std::string& data, bool is_binary) {
+  if (is_binary) {
+    send_ws_json(&conn, {{"stage", "error"}, {"data", {{"message", "Binary frames are not supported"}}}});
+    return;
+  }
+
+  const auto req_json = nlohmann::json::parse(data, nullptr, false);
+  if (req_json.is_discarded() || !req_json.is_object() ||
+      !req_json.contains("query") || !req_json["query"].is_string()) {
+    send_ws_json(&conn, {{"stage", "error"}, {"data", {{"message", "Expected JSON with string \"query\""}}}});
+    return;
+  }
+
+  const std::string query = req_json["query"].get<std::string>();
+  crow::websocket::connection* conn_ptr = &conn;
+
+  //Запит виконаується у фоновому пулі, щоб не блокувати I/O потік. Якщо викликати expand_query
+  // прямо в головному потоці crow, то кожен conn.send_text() буде просто кластися в чергу потоку crow
+  //і вони відправляться в кінці пачкою
+  ws_pool_.enqueue([this, conn_ptr, query]() {
+    SearchStageCallbacks callbacks;
+
+    callbacks.on_query_expansion =
+        [this, conn_ptr](const std::string& original, const std::vector<std::string>& expanded_terms) {
+          send_ws_json(conn_ptr, {
+              {"stage", "query_expansion"},
+              {"data", {
+                  {"original", original},
+                  {"expanded_terms", expanded_terms}
+              }}
+          });
+        };
+
+    callbacks.on_keyword_search =
+        [this, conn_ptr](const SearchResult& result) {
+          send_ws_json(conn_ptr, {
+              {"stage", "keyword_search"},
+              {"data", {
+                  {"results", matches_to_json(result.results)},
+                  {"time_ms", result.time_ms}
+              }}
+          });
+        };
+
+    callbacks.on_done = [this, conn_ptr]() {
+      send_ws_json(conn_ptr, {{"stage", "done"}});
+    };
+
+    engine_->execute_expanded_search(query, callbacks);
+  });
+}
+
+void ServerController::send_ws_json(crow::websocket::connection* conn, const nlohmann::json& payload) {
+  std::lock_guard<std::mutex> lock(ws_mtx_);
+  if (active_ws_connections_.find(conn) != active_ws_connections_.end()) {
+    conn->send_text(payload.dump());
+  }
+}
+
+nlohmann::json ServerController::matches_to_json(const std::vector<DocMatch>& matches) {
+  nlohmann::json arr = nlohmann::json::array();
+  for (const DocMatch& match : matches) {
+    arr.push_back({
+        {"doc_id", match.doc_id},
+        {"score", match.score},
+        {"snippet", match.snippet}
+    });
+  }
+  return arr;
 }
 
 crow::response ServerController::json_response(int status_code, const nlohmann::json& body) {
