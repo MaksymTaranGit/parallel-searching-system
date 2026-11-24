@@ -56,6 +56,7 @@ add_executable(search_server
     src/nlp/tokenizer.cpp
     src/nlp/ollama_client.cpp
     src/engine/search_engine.cpp
+    src/api/server_controller.cpp
 )
 
 target_include_directories(search_server PRIVATE

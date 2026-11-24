@@ -1,9 +1,10 @@
-#include <crow.h>
-#include <nlohmann/json.hpp>
-
 #include <cstdlib>
+#include <memory>
 #include <string>
 
+#include "api/server_controller.h"
+#include "core/inverted_index.h"
+#include "engine/search_engine.h"
 #include "nlp/ollama_client.h"
 
 namespace {
@@ -13,30 +14,21 @@ std::string get_env_or_default(const char* name, const std::string& fallback) {
   return (value != nullptr && value[0] != '\0') ? std::string(value) : fallback;
 }
 
-}  // namespace
+}
 
 int main() {
   const std::string ollama_url = get_env_or_default("OLLAMA_URL", "http://ollama:11434");
   const std::string ollama_model = get_env_or_default("OLLAMA_MODEL", "qwen2.5:0.5b");
+  const std::string dataset_path = get_env_or_default("DATASET_PATH", "/app/data");
   const int port = std::stoi(get_env_or_default("SERVER_PORT", "8080"));
 
-  OllamaClient ollama_client(ollama_url, ollama_model);
+  auto index = std::make_shared<ThreadSafeInvertedIndex>();
+  auto ollama = std::make_shared<OllamaClient>(ollama_url, ollama_model);
+  auto engine = std::make_shared<SearchEngine>(index, ollama);
 
-  crow::SimpleApp app;
+  ServerController controller(engine, dataset_path);
+  controller.register_routes();
+  controller.run(port);
 
-  CROW_ROUTE(app, "/api/health").methods(crow::HTTPMethod::GET)([&ollama_client]() {
-    const bool ollama_available = ollama_client.ping();
-
-    nlohmann::json body = {
-        {"status", "ok"},
-        {"ollama", ollama_available}
-    };
-
-    crow::response res(200, body.dump());
-    res.set_header("Content-Type", "application/json");
-    return res;
-  });
-
-  app.port(port).multithreaded().run();
   return 0;
 }
