@@ -70,6 +70,20 @@ target_link_libraries(search_server PRIVATE
     Threads::Threads
 )
 
+add_executable(search
+    clients/cli/main.cpp
+    clients/cli/cli_client.cpp
+)
+
+target_include_directories(search PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/clients/cli
+)
+
+target_link_libraries(search PRIVATE
+    nlohmann_json::nlohmann_json
+    httplib::httplib
+)
+
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(search_server PRIVATE -Wall -Wextra -Wpedantic)
 elseif(MSVC)

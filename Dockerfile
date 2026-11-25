@@ -12,9 +12,10 @@ WORKDIR /app
 
 COPY CMakeLists.txt ./
 COPY src ./src
+COPY clients/cli ./clients/cli
 
 RUN cmake -B build -DCMAKE_BUILD_TYPE=Release && \
-    cmake --build build --target search_server -j"$(nproc)"
+    cmake --build build --target search_server search -j"$(nproc)"
 
 FROM debian:bookworm-slim AS runtime
 
@@ -25,6 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 COPY --from=builder /app/build/search_server /app/search_server
+COPY --from=builder /app/build/search /app/search
 
 EXPOSE 8080
 
