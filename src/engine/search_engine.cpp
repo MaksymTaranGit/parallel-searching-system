@@ -14,7 +14,7 @@
 namespace {
 
 constexpr double original_term_weight = 1.0;
-constexpr double expanded_term_weight = 0.5;
+constexpr double expanded_term_weight = 0.2;
 constexpr std::size_t snippet_length = 200;
 constexpr std::size_t snippet_lead_context = 60;
 constexpr std::size_t snippet_chunk_size = 65536;

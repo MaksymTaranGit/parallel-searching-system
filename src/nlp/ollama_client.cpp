@@ -77,7 +77,7 @@ std::vector<std::string> parse_expanded_terms(const std::string& llm_response) {
     } else if (parsed.is_object()) {
       if (parsed.contains("terms") && parsed["terms"].is_array()) {
         extract_from_json_array(parsed["terms"], terms);
-      } else { //якщо замість terms модель написала іншу назву ключа
+      } else {
         for (const auto& [key, value] : parsed.items()) {
           if (value.is_array()) {
             extract_from_json_array(value, terms);
@@ -86,23 +86,38 @@ std::vector<std::string> parse_expanded_terms(const std::string& llm_response) {
         }
       }
     }
-  }
-
-  if (!terms.empty()) {
+    // JSON був валідним: навіть якщо масив спорожнів після фільтрації, не парсимо ключі як текст
     return terms;
   }
-  
-  //якщо модель повернула невалідний джсон
-  std::string current;
-  for (char ch : llm_response) {
-    if (ch == ',' || ch == '\n' || ch == ';') {
-      push_unique_term(terms, current);
-      current.clear();
-    } else {
-      current.push_back(ch);
+
+  // Fallback для обірваного JSON: беремо тільки завершені рядки в лапках всередині масиву [...]
+  const std::size_t arr_start = llm_response.find('[');
+  if (arr_start != std::string::npos) {
+    std::size_t pos = arr_start + 1;
+    while ((pos = llm_response.find('"', pos)) != std::string::npos) {
+      const std::size_t end_quote = llm_response.find('"', pos + 1);
+      if (end_quote == std::string::npos) {
+        break;
+      }
+      push_unique_term(terms, llm_response.substr(pos + 1, end_quote - pos - 1));
+      pos = end_quote + 1;
     }
+    return terms;
   }
-  push_unique_term(terms, current);
+
+  // Останній fallback лише якщо модель повернула простий текст без JSON-структури
+  if (llm_response.find('{') == std::string::npos) {
+    std::string current;
+    for (char ch : llm_response) {
+      if (ch == ',' || ch == '\n' || ch == ';') {
+        push_unique_term(terms, current);
+        current.clear();
+      } else {
+        current.push_back(ch);
+      }
+    }
+    push_unique_term(terms, current);
+  }
 
   return terms;
 }
@@ -140,10 +155,15 @@ std::vector<std::string> OllamaClient::expand_query(const std::string& query) co
   client.set_read_timeout(30, 0);
 
   const std::string prompt =
-      "Return a JSON object with a single key \"terms\" containing an array of 4 to 5 "
-      "single-word English synonyms or closely related search keywords for the query: \"" +
-      query +
-      "\". Example: {\"terms\": [\"cosmos\", \"stars\", \"galaxy\", \"astronomy\"]}.";
+      "Return JSON {\"terms\": [...]} with 4 to 5 single-word lowercase English "
+      "synonyms or related search keywords. If the query is not in English, "
+      "translate its meaning and return ONLY English words.\n\n"
+      "Query: \"fast car\"\n"
+      "Output: {\"terms\": [\"vehicle\", \"automobile\", \"speed\", \"engine\", \"racing\"]}\n\n"
+      "Query: \"grande maison\"\n"
+      "Output: {\"terms\": [\"house\", \"home\", \"mansion\", \"building\", \"estate\"]}\n\n"
+      "Query: \"" + query + "\"\n"
+      "Output:";
 
   const nlohmann::json request_body = {
       {"model", model_name_},

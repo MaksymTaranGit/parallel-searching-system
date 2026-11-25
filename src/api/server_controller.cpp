@@ -244,9 +244,7 @@ crow::response ServerController::json_response(int status_code, const nlohmann::
   return res;
 }
 
-crow::response ServerController::serve_static_file(
-    const std::string& filename,
-    const std::string& content_type) const {
+crow::response ServerController::serve_static_file(const std::string& filename, const std::string& content_type) const {
   const std::filesystem::path full_path = std::filesystem::path(web_dir_) / filename;
   std::ifstream file(full_path, std::ios::binary);
   if (!file) {
