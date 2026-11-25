@@ -27,6 +27,7 @@ WORKDIR /app
 
 COPY --from=builder /app/build/search_server /app/search_server
 COPY --from=builder /app/build/search /app/search
+COPY clients/web /app/web
 
 EXPOSE 8080
 

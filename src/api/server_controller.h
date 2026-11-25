@@ -13,12 +13,13 @@
 
 class ServerController {
  public:
-  ServerController(std::shared_ptr<SearchEngine> engine, std::string dataset_path);
+  ServerController(std::shared_ptr<SearchEngine> engine, std::string dataset_path, std::string web_dir);
 
   void register_routes();
   void run(int port);
 
  private:
+  crow::response serve_static_file(const std::string& filename, const std::string& content_type) const;
   crow::response handle_health() const;
   crow::response handle_index(const crow::request& req);
   crow::response handle_search(const crow::request& req) const;
@@ -34,6 +35,7 @@ class ServerController {
 
   std::shared_ptr<SearchEngine> engine_;
   std::string dataset_path_;
+  std::string web_dir_;
 
   std::mutex ws_mtx_;
   std::unordered_set<crow::websocket::connection*> active_ws_connections_; //потрібен щоб перед відправкою(send) дивитись чи існує з'єднання

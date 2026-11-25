@@ -1,5 +1,7 @@
 #include "api/server_controller.h"
-
+#include <filesystem>
+#include <fstream>
+#include <sstream>
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
@@ -15,9 +17,10 @@ std::size_t resolve_ws_pool_size() {
 
 }
 
-ServerController::ServerController(std::shared_ptr<SearchEngine> engine, std::string dataset_path)
+ServerController::ServerController(std::shared_ptr<SearchEngine> engine, std::string dataset_path, std::string web_dir)
     : engine_(std::move(engine)),
       dataset_path_(std::move(dataset_path)),
+      web_dir_(std::move(web_dir)),
       ws_pool_(resolve_ws_pool_size()) {}
 
 void ServerController::register_routes() {
@@ -43,6 +46,21 @@ void ServerController::register_routes() {
       .onmessage([this](crow::websocket::connection& conn, const std::string& data, bool is_binary) {
         handle_ws_message(conn, data, is_binary);
       });
+  
+  CROW_ROUTE(app_, "/")
+    .methods(crow::HTTPMethod::GET)([this]() {
+      return serve_static_file("index.html", "text/html; charset=utf-8");
+    });
+
+  CROW_ROUTE(app_, "/style.css")
+    .methods(crow::HTTPMethod::GET)([this]() {
+      return serve_static_file("style.css", "text/css; charset=utf-8");
+    });
+
+  CROW_ROUTE(app_, "/app.js")
+    .methods(crow::HTTPMethod::GET)([this]() {
+      return serve_static_file("app.js", "application/javascript; charset=utf-8");
+    });
 }
 
 void ServerController::run(int port) {
@@ -223,5 +241,22 @@ nlohmann::json ServerController::matches_to_json(const std::vector<DocMatch>& ma
 crow::response ServerController::json_response(int status_code, const nlohmann::json& body) {
   crow::response res(status_code, body.dump());
   res.set_header("Content-Type", "application/json");
+  return res;
+}
+
+crow::response ServerController::serve_static_file(
+    const std::string& filename,
+    const std::string& content_type) const {
+  const std::filesystem::path full_path = std::filesystem::path(web_dir_) / filename;
+  std::ifstream file(full_path, std::ios::binary);
+  if (!file) {
+    return crow::response(404, "File not found");
+  }
+
+  std::ostringstream buffer;
+  buffer << file.rdbuf();
+
+  crow::response res(200, buffer.str());
+  res.set_header("Content-Type", content_type);
   return res;
 }
