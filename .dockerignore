@@ -7,3 +7,10 @@ docs/
 .gitignore
 README.md
 .vs/
+venv/
+.venv/
+env/
+*.md
+__pycache__/
+*.py[cod]
+.pytest_cache/

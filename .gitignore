@@ -12,3 +12,5 @@ data/
 *.o
 *.out
 .vs/
+.venv/
+__pycache__/
