@@ -1,0 +1,278 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0">
+  <diagram id="seq_ws_search_v2" name="Sequence Diagram - WebSocket Search">
+    <mxGraphModel dx="1750" dy="1140" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1750" pageHeight="1140" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Заголовок -->
+        <mxCell id="title" value="Sequence Diagram: Асинхронний пошук через WebSocket зі стрімінгом етапів (/ws/search)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;fontColor=#0f172a;" vertex="1" parent="1">
+          <mxGeometry x="350" y="20" width="1050" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== LIFELINES ==================== -->
+        <mxCell id="ll_user" value="Web UI Клієнт" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#e0f2fe;strokeColor=#0284c7;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="30" y="70" width="130" height="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="act_user" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#bae6fd;strokeColor=#0284c7;" vertex="1" parent="ll_user">
+          <mxGeometry x="55" y="55" width="20" height="915" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ll_ctrl" value="ServerController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#f1f5f9;strokeColor=#475569;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="270" y="70" width="130" height="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl_1" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#cbd5e1;strokeColor=#475569;" vertex="1" parent="ll_ctrl">
+          <mxGeometry x="55" y="55" width="20" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl_2" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#cbd5e1;strokeColor=#475569;" vertex="1" parent="ll_ctrl">
+          <mxGeometry x="55" y="405" width="20" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl_3" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#cbd5e1;strokeColor=#475569;" vertex="1" parent="ll_ctrl">
+          <mxGeometry x="55" y="832" width="20" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl_4" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#cbd5e1;strokeColor=#475569;" vertex="1" parent="ll_ctrl">
+          <mxGeometry x="55" y="908" width="20" height="52" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ll_pool" value="ws_pool_&lt;br&gt;(ThreadPool)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#eff6ff;strokeColor=#2563eb;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="480" y="70" width="140" height="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="act_pool" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#bfdbfe;strokeColor=#2563eb;" vertex="1" parent="ll_pool">
+          <mxGeometry x="60" y="215" width="20" height="778" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ll_eng" value="SearchEngine" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#fffbeb;strokeColor=#d97706;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="680" y="70" width="130" height="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="act_eng" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#fef3c7;strokeColor=#d97706;" vertex="1" parent="ll_eng">
+          <mxGeometry x="55" y="245" width="20" height="743" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ll_ollama" value="OllamaClient" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#faf5ff;strokeColor=#9333ea;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="880" y="70" width="130" height="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ollama" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#e9d5ff;strokeColor=#9333ea;" vertex="1" parent="ll_ollama">
+          <mxGeometry x="55" y="283" width="20" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ll_tok" value="Tokenizer" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#faf5ff;strokeColor=#9333ea;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="70" width="120" height="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="act_tok" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#e9d5ff;strokeColor=#9333ea;" vertex="1" parent="ll_tok">
+          <mxGeometry x="50" y="482" width="20" height="46" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ll_index" value="ThreadSafeInvertedIndex" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="70" width="170" height="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="act_idx" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#bbf7d0;strokeColor=#16a34a;" vertex="1" parent="ll_index">
+          <mxGeometry x="75" y="628" width="20" height="115" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ll_shard" value="IndexShard (1 із 64)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="1560" y="70" width="150" height="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="act_shard" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#bbf7d0;strokeColor=#16a34a;" vertex="1" parent="ll_shard">
+          <mxGeometry x="65" y="663" width="20" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== FRAMES ==================== -->
+        <mxCell id="frame_loop" value="loop    [для кожного унікального терміну запиту]" style="shape=rect;html=1;verticalAlign=top;fontStyle=1;whiteSpace=wrap;align=left;fillColor=none;strokeColor=#16a34a;strokeWidth=1.5;dashed=1;fontSize=10;fontColor=#15803d;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="710" y="665" width="975" height="155" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== MESSAGES ==================== -->
+        <mxCell id="msg1" value="1: WebSocket Handshake&lt;br&gt;(GET /ws/search, Upgrade)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#0f172a;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="105" y="135" as="sourcePoint" />
+            <mxPoint x="325" y="135" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg2" value="2: 101 Switching Protocols" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;rounded=0;strokeColor=#0f172a;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="325" y="170" as="sourcePoint" />
+            <mxPoint x="105" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg3" value="3: WS send {&quot;query&quot;: &quot;...&quot;}" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#0284c7;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="105" y="210" as="sourcePoint" />
+            <mxPoint x="325" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg4" value="4: Валідація JSON&lt;br&gt;(stage &quot;error&quot; при помилці)" style="html=1;align=left;spacingLeft=6;endArrow=block;rounded=0;strokeColor=#475569;strokeWidth=1.2;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="232" as="sourcePoint" />
+            <mxPoint x="345" y="260" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="375" y="232" />
+              <mxPoint x="375" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg5" value="5: Асинхронна задача в чергу&lt;br&gt;(не блокує потік Crow)" style="html=1;verticalAlign=bottom;endArrow=open;rounded=0;strokeColor=#2563eb;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="290" as="sourcePoint" />
+            <mxPoint x="540" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg6" value="6: Запуск розширеного пошуку&lt;br&gt;(query, stage_callback)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#d97706;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="320" as="sourcePoint" />
+            <mxPoint x="735" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg7" value="7: Запит розширення запиту" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#9333ea;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="755" y="358" as="sourcePoint" />
+            <mxPoint x="935" y="358" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg8" value="8: timed_mutex (15s)&lt;br&gt;POST /api/generate&lt;br&gt;(fallback [] при таймауті)" style="html=1;align=left;spacingLeft=6;endArrow=block;rounded=0;strokeColor=#6b21a8;strokeWidth=1.2;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="955" y="380" as="sourcePoint" />
+            <mxPoint x="955" y="420" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="985" y="380" />
+              <mxPoint x="985" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg9" value="9: Список синонімів (або [])" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;rounded=0;strokeColor=#9333ea;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="935" y="445" as="sourcePoint" />
+            <mxPoint x="755" y="445" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Етап 1: query_expansion -->
+        <mxCell id="msg10" value="10: callback(&quot;query_expansion&quot;, original + terms)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#d97706;strokeWidth=1.5;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735" y="482" as="sourcePoint" />
+            <mxPoint x="345" y="482" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg11" value="11: WS push {&quot;stage&quot;: &quot;query_expansion&quot;,&lt;br&gt;&quot;data&quot;: {original, expanded_terms}}" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#0284c7;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="325" y="522" as="sourcePoint" />
+            <mxPoint x="105" y="522" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Токенізація та ваги -->
+        <mxCell id="msg12" value="12: Токенізація запиту та синонімів, фільтр стоп-слів" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#9333ea;strokeWidth=1.5;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="755" y="558" as="sourcePoint" />
+            <mxPoint x="1180" y="558" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg13" value="13: Нормалізовані токени" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;rounded=0;strokeColor=#9333ea;strokeWidth=1.5;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1180" y="590" as="sourcePoint" />
+            <mxPoint x="755" y="590" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg14" value="14: Призначення ваг термінам&lt;br&gt;(оригінал: 1.0, синоніми: знижена)" style="html=1;align=left;spacingLeft=6;endArrow=block;rounded=0;strokeColor=#475569;strokeWidth=1.2;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="755" y="612" as="sourcePoint" />
+            <mxPoint x="755" y="642" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="785" y="612" />
+              <mxPoint x="785" y="642" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Пошук по шардах -->
+        <mxCell id="msg15" value="15: Пошук постінгів для терміну" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#16a34a;strokeWidth=1.5;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="755" y="705" as="sourcePoint" />
+            <mxPoint x="1385" y="705" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg16" value="16: Пошук у HashTable (hash%64)&lt;br&gt;[shared_lock — паралельне читання]" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#16a34a;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1405" y="740" as="sourcePoint" />
+            <mxPoint x="1625" y="740" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg17" value="17: Список Posting" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;rounded=0;strokeColor=#16a34a;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1625" y="775" as="sourcePoint" />
+            <mxPoint x="1405" y="775" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg18" value="18: Повернення постінгів" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;rounded=0;strokeColor=#16a34a;strokeWidth=1.5;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1385" y="805" as="sourcePoint" />
+            <mxPoint x="755" y="805" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Ранжування та сніпети -->
+        <mxCell id="msg19" value="19: Зважене TF-IDF ранжування (Топ-10)&lt;br&gt;та читання сніпетів із диска" style="html=1;align=left;spacingLeft=6;endArrow=block;rounded=0;strokeColor=#475569;strokeWidth=1.2;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="755" y="842" as="sourcePoint" />
+            <mxPoint x="755" y="874" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="785" y="842" />
+              <mxPoint x="785" y="874" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Етап 2: keyword_search -->
+        <mxCell id="msg20" value="20: callback(&quot;keyword_search&quot;, results + time_ms)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#d97706;strokeWidth=1.5;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735" y="910" as="sourcePoint" />
+            <mxPoint x="345" y="910" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg21" value="21: WS push {&quot;stage&quot;: &quot;keyword_search&quot;,&lt;br&gt;&quot;data&quot;: {results, time_ms}}" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#0284c7;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="325" y="950" as="sourcePoint" />
+            <mxPoint x="105" y="950" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Етап 3: done -->
+        <mxCell id="msg22" value="22: callback(&quot;done&quot;, {})" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#d97706;strokeWidth=1.5;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735" y="986" as="sourcePoint" />
+            <mxPoint x="345" y="986" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg23" value="23: WS push {&quot;stage&quot;: &quot;done&quot;, &quot;data&quot;: {}}" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#0284c7;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="325" y="1020" as="sourcePoint" />
+            <mxPoint x="105" y="1020" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Завершення задачі -->
+        <mxCell id="msg24" value="24: Завершення задачі (звільнення воркера)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;rounded=0;strokeColor=#2563eb;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735" y="1052" as="sourcePoint" />
+            <mxPoint x="560" y="1052" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

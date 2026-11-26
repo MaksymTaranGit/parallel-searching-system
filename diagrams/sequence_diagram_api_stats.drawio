@@ -1,0 +1,109 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0">
+  <diagram id="seq_api_stats_v2" name="Sequence Diagram - Stats">
+    <mxGraphModel dx="1160" dy="640" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1160" pageHeight="640" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Заголовок -->
+        <mxCell id="title" value="Sequence Diagram: Отримання статистики системи (GET /api/stats)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;fontColor=#0f172a;" vertex="1" parent="1">
+          <mxGeometry x="180" y="20" width="800" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== LIFELINES ==================== -->
+        <mxCell id="ll_client" value="CLI / Web Клієнт" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="50" y="70" width="150" height="530" as="geometry" />
+        </mxCell>
+        <mxCell id="act_client" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#fef3c7;strokeColor=#d97706;" vertex="1" parent="ll_client">
+          <mxGeometry x="65" y="55" width="20" height="430" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ll_ctrl" value="ServerController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#f1f5f9;strokeColor=#475569;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="320" y="70" width="150" height="530" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#cbd5e1;strokeColor=#475569;" vertex="1" parent="ll_ctrl">
+          <mxGeometry x="65" y="55" width="20" height="430" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ll_eng" value="SearchEngine" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#fffbeb;strokeColor=#d97706;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="590" y="70" width="150" height="530" as="geometry" />
+        </mxCell>
+        <mxCell id="act_eng" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#fef3c7;strokeColor=#d97706;" vertex="1" parent="ll_eng">
+          <mxGeometry x="65" y="105" width="20" height="245" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ll_index" value="ThreadSafeInvertedIndex" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="860" y="70" width="180" height="530" as="geometry" />
+        </mxCell>
+        <mxCell id="act_idx" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#bbf7d0;strokeColor=#16a34a;" vertex="1" parent="ll_index">
+          <mxGeometry x="80" y="150" width="20" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== MESSAGES ==================== -->
+        <mxCell id="msg1" value="1: GET /api/stats" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#0f172a;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="135" y="135" as="sourcePoint" />
+            <mxPoint x="385" y="135" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg2" value="2: Запит статистики індексу" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#d97706;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="405" y="185" as="sourcePoint" />
+            <mxPoint x="655" y="185" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg3" value="3: Кількість документів&lt;br&gt;[shared_lock reg_mtx_]" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#16a34a;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="675" y="232" as="sourcePoint" />
+            <mxPoint x="940" y="232" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg4" value="4: Кількість документів (documents)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;rounded=0;strokeColor=#16a34a;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="940" y="278" as="sourcePoint" />
+            <mxPoint x="675" y="278" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg5" value="5: Читання atomic-метрик&lt;br&gt;(час побудови, кількість потоків)" style="html=1;align=left;spacingLeft=6;endArrow=block;rounded=0;strokeColor=#475569;strokeWidth=1.2;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="675" y="310" as="sourcePoint" />
+            <mxPoint x="675" y="348" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="708" y="310" />
+              <mxPoint x="708" y="348" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg6" value="6: StatsResult&lt;br&gt;(documents, build_time_ms, threads)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;rounded=0;strokeColor=#d97706;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="655" y="405" as="sourcePoint" />
+            <mxPoint x="405" y="405" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg7" value="7: Формування JSON-відповіді" style="html=1;align=left;spacingLeft=6;endArrow=block;rounded=0;strokeColor=#475569;strokeWidth=1.2;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="405" y="440" as="sourcePoint" />
+            <mxPoint x="405" y="472" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="438" y="440" />
+              <mxPoint x="438" y="472" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg8" value="8: 200 OK JSON&lt;br&gt;{&quot;documents&quot;, &quot;index_build_time_ms&quot;,&lt;br&gt;&quot;threads_used&quot;}" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;rounded=0;strokeColor=#0f172a;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="385" y="535" as="sourcePoint" />
+            <mxPoint x="135" y="535" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

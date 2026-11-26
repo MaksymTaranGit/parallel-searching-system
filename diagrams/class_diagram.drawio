@@ -1,0 +1,254 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0">
+  <diagram id="class_diag_v8" name="Class Diagram">
+    <mxGraphModel dx="343" dy="176" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1740" pageHeight="1160" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="box_storage" parent="1" style="shape=rect;html=1;verticalAlign=top;fontStyle=1;whiteSpace=wrap;align=center;fillColor=#f8fafc;strokeColor=#475569;strokeWidth=1.5;dashed=1;fontSize=12;fontColor=#0f172a;arcSize=2;spacingTop=6;" value="Інвертований індекс, структури даних та пул потоків (src/index, src/concurrency)" vertex="1">
+          <mxGeometry height="505" width="1200" x="30" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c_hashtable" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="HashTable&amp;lt;V&amp;gt;" vertex="1">
+          <mxGeometry height="190" width="275" x="50" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="c_hashtable_attrs" parent="c_hashtable" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="- slots_: vector&amp;lt;Slot&amp;gt;&lt;br&gt;- size_: size_t&lt;br&gt;- capacity_: size_t" vertex="1">
+          <mxGeometry height="62" width="275" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c_hashtable_sep" parent="c_hashtable" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#16a34a;" value="" vertex="1">
+          <mxGeometry height="8" width="275" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c_hashtable_meth" parent="c_hashtable" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ find(key: string): V*&lt;br&gt;+ get_or_insert(key: string): V&amp;amp;&lt;br&gt;+ for_each(fn): void&lt;br&gt;+ clear(): void&lt;br&gt;- rehash(): void" vertex="1">
+          <mxGeometry height="92" width="275" y="98" as="geometry" />
+        </mxCell>
+        <mxCell id="c_slot" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="«struct»&lt;br&gt;Slot" vertex="1">
+          <mxGeometry height="100" width="215" x="50" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="c_slot_attrs" parent="c_slot" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ key: string&lt;br&gt;+ value: V&lt;br&gt;+ occupied: bool" vertex="1">
+          <mxGeometry height="64" width="215" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c_shard" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="«alignas(64)»&lt;br&gt;IndexShard" vertex="1">
+          <mxGeometry height="190" width="345" x="375" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="c_shard_attrs" parent="c_shard" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="- rw_mtx_: mutable shared_mutex&lt;br&gt;- table_: HashTable&amp;lt;vector&amp;lt;Posting&amp;gt;&amp;gt;" vertex="1">
+          <mxGeometry height="46" width="345" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c_shard_sep" parent="c_shard" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#16a34a;" value="" vertex="1">
+          <mxGeometry height="8" width="345" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="c_shard_meth" parent="c_shard" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ add_term(term, doc_id, tf): void&lt;br&gt;+ add_batch(items: vector&amp;lt;ShardInsertItem&amp;gt;): void&lt;br&gt;+ get_postings(term: string): vector&amp;lt;Posting&amp;gt;&lt;br&gt;+ clear(): void" vertex="1">
+          <mxGeometry height="100" width="345" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c_posting" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="«struct»&lt;br&gt;Posting" vertex="1">
+          <mxGeometry height="86" width="150" x="765" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="c_posting_attrs" parent="c_posting" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ doc_id: int&lt;br&gt;+ term_freq: int" vertex="1">
+          <mxGeometry height="50" width="150" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c_shard_item" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="«struct»&lt;br&gt;ShardInsertItem" vertex="1">
+          <mxGeometry height="100" width="150" x="765" y="175" as="geometry" />
+        </mxCell>
+        <mxCell id="c_shard_item_attrs" parent="c_shard_item" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ term: string&lt;br&gt;+ doc_id: int&lt;br&gt;+ tf: int" vertex="1">
+          <mxGeometry height="64" width="150" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c_index" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="ThreadSafeInvertedIndex" vertex="1">
+          <mxGeometry height="206" width="475" x="375" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="c_index_attrs" parent="c_index" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="- shards_: array&amp;lt;IndexShard, 64&amp;gt;&lt;br&gt;- doc_registry_: vector&amp;lt;string&amp;gt;&lt;br&gt;- reg_mtx_: mutable shared_mutex" vertex="1">
+          <mxGeometry height="62" width="475" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c_index_sep" parent="c_index" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#16a34a;" value="" vertex="1">
+          <mxGeometry height="8" width="475" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c_index_meth" parent="c_index" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ register_doc(path: string): int&lt;br&gt;+ add_document(doc_id: int, tf_map: HashTable&amp;lt;int&amp;gt;): void&lt;br&gt;+ search_term(term: string): vector&amp;lt;Posting&amp;gt;&lt;br&gt;+ get_doc_path(doc_id: int): string&lt;br&gt;+ get_document_count(): size_t&lt;br&gt;+ clear(): void" vertex="1">
+          <mxGeometry height="108" width="475" y="98" as="geometry" />
+        </mxCell>
+        <mxCell id="c_threadpool" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#eff6ff;strokeColor=#2563eb;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="ThreadPool" vertex="1">
+          <mxGeometry height="242" width="255" x="955" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="c_threadpool_attrs" parent="c_threadpool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="- workers_: vector&amp;lt;thread&amp;gt;&lt;br&gt;- tasks_: queue&amp;lt;function&amp;lt;void()&amp;gt;&amp;gt;&lt;br&gt;- queue_mtx_: mutex&lt;br&gt;- cv_: condition_variable&lt;br&gt;- done_cv_: condition_variable&lt;br&gt;- active_tasks_: size_t&lt;br&gt;- stop_: bool" vertex="1">
+          <mxGeometry height="126" width="255" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c_threadpool_sep" parent="c_threadpool" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#2563eb;" value="" vertex="1">
+          <mxGeometry height="8" width="255" y="154" as="geometry" />
+        </mxCell>
+        <mxCell id="c_threadpool_meth" parent="c_threadpool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ ThreadPool(threads: size_t)&lt;br&gt;+ ~ThreadPool()&lt;br&gt;+ enqueue(task: function&amp;lt;void()&amp;gt;): void&lt;br&gt;+ wait_all(): void" vertex="1">
+          <mxGeometry height="80" width="255" y="162" as="geometry" />
+        </mxCell>
+        <mxCell id="box_nlp" parent="1" style="shape=rect;html=1;verticalAlign=top;fontStyle=1;whiteSpace=wrap;align=center;fillColor=#f8fafc;strokeColor=#475569;strokeWidth=1.5;dashed=1;fontSize=12;fontColor=#0f172a;arcSize=2;spacingTop=6;" value="Інтеграція LLM та текстовий аналіз (src/nlp)" vertex="1">
+          <mxGeometry height="505" width="410" x="1290" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c_tokenizer" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#faf5ff;strokeColor=#9333ea;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="Tokenizer" vertex="1">
+          <mxGeometry height="140" width="360" x="1315" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="c_tokenizer_attrs" parent="c_tokenizer" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="- stop_words_: unordered_set&amp;lt;string&amp;gt;" vertex="1">
+          <mxGeometry height="38" width="360" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c_tokenizer_sep" parent="c_tokenizer" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#9333ea;" value="" vertex="1">
+          <mxGeometry height="8" width="360" y="66" as="geometry" />
+        </mxCell>
+        <mxCell id="c_tokenizer_meth" parent="c_tokenizer" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ tokenize(text: string): vector&amp;lt;string&amp;gt;&lt;br&gt;+ compute_frequencies(text: string): HashTable&amp;lt;int&amp;gt;" vertex="1">
+          <mxGeometry height="66" width="360" y="74" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ollama" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#faf5ff;strokeColor=#9333ea;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="OllamaClient" vertex="1">
+          <mxGeometry height="196" width="360" x="1315" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ollama_attrs" parent="c_ollama" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="- base_url_: string&lt;br&gt;- model_name_: string&lt;br&gt;- lock_timeout_ms_: int&lt;br&gt;- llm_mutex_: mutable timed_mutex" vertex="1">
+          <mxGeometry height="80" width="360" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ollama_sep" parent="c_ollama" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#9333ea;" value="" vertex="1">
+          <mxGeometry height="8" width="360" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ollama_meth" parent="c_ollama" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ OllamaClient(url, model, timeout_ms = 15000)&lt;br&gt;+ ping(): bool&lt;br&gt;+ expand_query(query: string): vector&amp;lt;string&amp;gt;" vertex="1">
+          <mxGeometry height="80" width="360" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="box_service" parent="1" style="shape=rect;html=1;verticalAlign=top;fontStyle=1;whiteSpace=wrap;align=center;fillColor=#f8fafc;strokeColor=#475569;strokeWidth=1.5;dashed=1;fontSize=12;fontColor=#0f172a;arcSize=2;spacingTop=6;" value="Сервісний шар та DTO результатів (src/engine)" vertex="1">
+          <mxGeometry height="535" width="1200" x="30" y="595" as="geometry" />
+        </mxCell>
+        <mxCell id="c_engine" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#fffbeb;strokeColor=#d97706;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="SearchEngine" vertex="1">
+          <mxGeometry height="288" width="570" x="295" y="635" as="geometry" />
+        </mxCell>
+        <mxCell id="c_engine_attrs" parent="c_engine" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="- index_: shared_ptr&amp;lt;ThreadSafeInvertedIndex&amp;gt;&lt;br&gt;- ollama_: shared_ptr&amp;lt;OllamaClient&amp;gt;&lt;br&gt;- tokenizer_: Tokenizer&lt;br&gt;- last_build_time_ms_: atomic&amp;lt;int64_t&amp;gt;&lt;br&gt;- last_threads_used_: atomic&amp;lt;size_t&amp;gt;" vertex="1">
+          <mxGeometry height="96" width="570" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c_engine_sep" parent="c_engine" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d97706;" value="" vertex="1">
+          <mxGeometry height="8" width="570" y="124" as="geometry" />
+        </mxCell>
+        <mxCell id="c_engine_meth" parent="c_engine" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ build_index(dataset_path: string, threads: size_t): IndexResult&lt;br&gt;+ search(query: string, mode: string): SearchResult&lt;br&gt;+ execute_expanded_search(query: string, cb: StageCallback): SearchResult&lt;br&gt;+ check_health(): bool&lt;br&gt;+ get_stats(): StatsResult&lt;br&gt;- rank_documents(terms: vector&amp;lt;WeightedTerm&amp;gt;): vector&amp;lt;DocMatch&amp;gt;&lt;br&gt;- extract_snippet(path: string, terms: vector&amp;lt;string&amp;gt;): string&lt;br&gt;- scan_directory(path: string): vector&amp;lt;string&amp;gt;" vertex="1">
+          <mxGeometry height="156" width="570" y="132" as="geometry" />
+        </mxCell>
+        <mxCell id="c_weighted" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#fffbeb;strokeColor=#d97706;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="«struct»&lt;br&gt;WeightedTerm" vertex="1">
+          <mxGeometry height="86" width="185" x="55" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="c_weighted_attrs" parent="c_weighted" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ term: string&lt;br&gt;+ weight: double" vertex="1">
+          <mxGeometry height="50" width="185" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c_index_res" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#fffbeb;strokeColor=#d97706;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="«struct»&lt;br&gt;IndexResult" vertex="1">
+          <mxGeometry height="100" width="220" x="55" y="985" as="geometry" />
+        </mxCell>
+        <mxCell id="c_index_res_attrs" parent="c_index_res" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ documents_indexed: size_t&lt;br&gt;+ time_ms: int64_t&lt;br&gt;+ threads_used: size_t" vertex="1">
+          <mxGeometry height="64" width="220" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c_search_res" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#fffbeb;strokeColor=#d97706;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="«struct»&lt;br&gt;SearchResult" vertex="1">
+          <mxGeometry height="100" width="265" x="315" y="985" as="geometry" />
+        </mxCell>
+        <mxCell id="c_search_res_attrs" parent="c_search_res" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ results: vector&amp;lt;DocMatch&amp;gt;&lt;br&gt;+ expanded_terms: vector&amp;lt;string&amp;gt;&lt;br&gt;+ time_ms: int64_t" vertex="1">
+          <mxGeometry height="64" width="265" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c_docmatch" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#fffbeb;strokeColor=#d97706;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="«struct»&lt;br&gt;DocMatch" vertex="1">
+          <mxGeometry height="100" width="200" x="635" y="985" as="geometry" />
+        </mxCell>
+        <mxCell id="c_docmatch_attrs" parent="c_docmatch" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ doc_id: string&lt;br&gt;+ score: double&lt;br&gt;+ snippet: string" vertex="1">
+          <mxGeometry height="64" width="200" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c_stats_res" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#fffbeb;strokeColor=#d97706;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="«struct»&lt;br&gt;StatsResult" vertex="1">
+          <mxGeometry height="100" width="250" x="890" y="985" as="geometry" />
+        </mxCell>
+        <mxCell id="c_stats_res_attrs" parent="c_stats_res" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ documents: size_t&lt;br&gt;+ index_build_time_ms: int64_t&lt;br&gt;+ threads_used: size_t" vertex="1">
+          <mxGeometry height="64" width="250" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="box_api" parent="1" style="shape=rect;html=1;verticalAlign=top;fontStyle=1;whiteSpace=wrap;align=center;fillColor=#f8fafc;strokeColor=#475569;strokeWidth=1.5;dashed=1;fontSize=12;fontColor=#0f172a;arcSize=2;spacingTop=6;" value="Мережевий шар контролерів (src/api — REST, WebSocket, Static Web UI)" vertex="1">
+          <mxGeometry height="535" width="410" x="1290" y="595" as="geometry" />
+        </mxCell>
+        <mxCell id="c_controller" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#f1f5f9;strokeColor=#475569;strokeWidth=1.5;fontSize=11;fontColor=#0f172a;" value="ServerController" vertex="1">
+          <mxGeometry height="308" width="360" x="1315" y="645" as="geometry" />
+        </mxCell>
+        <mxCell id="c_controller_attrs" parent="c_controller" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="- engine_: shared_ptr&amp;lt;SearchEngine&amp;gt;&lt;br&gt;- dataset_path_: string&lt;br&gt;- web_dir_: string&lt;br&gt;- app_: crow::SimpleApp&lt;br&gt;- ws_pool_: ThreadPool" vertex="1">
+          <mxGeometry height="96" width="360" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c_controller_sep" parent="c_controller" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#475569;" value="" vertex="1">
+          <mxGeometry height="8" width="360" y="124" as="geometry" />
+        </mxCell>
+        <mxCell id="c_controller_meth" parent="c_controller" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=6;spacingTop=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;fontColor=#0f172a;" value="+ register_routes(): void&lt;br&gt;+ run(port: int): void&lt;br&gt;- serve_static_file(file, type): crow::response&lt;br&gt;- handle_health(): crow::response&lt;br&gt;- handle_index(req): crow::response&lt;br&gt;- handle_search(req): crow::response&lt;br&gt;- handle_stats(): crow::response&lt;br&gt;- handle_ws_search(conn, data): void&lt;br&gt;- serialize_results(res): json" vertex="1">
+          <mxGeometry height="176" width="360" y="132" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_ht_slot" edge="1" parent="1" source="c_hashtable" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=1;endArrow=open;strokeColor=#16a34a;strokeWidth=1.5;exitX=0.39;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="c_slot">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_shard_ht" edge="1" parent="1" source="c_shard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=1;endArrow=open;strokeColor=#16a34a;strokeWidth=1.5;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="c_hashtable">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_shard_posting" edge="1" parent="1" source="c_shard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=1;endArrow=open;strokeColor=#16a34a;strokeWidth=1.5;exitX=1;exitY=0.23;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="c_posting">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_shard_item" edge="1" parent="1" source="c_shard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#16a34a;strokeWidth=1.5;exitX=1;exitY=0.81;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="c_shard_item">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_index_shard" edge="1" parent="1" source="c_index" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=1;endArrow=open;strokeColor=#16a34a;strokeWidth=1.5;fontSize=10;fontColor=#15803d;labelBackgroundColor=#f8fafc;exitX=0.36;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="c_shard" value="64">
+          <mxGeometry relative="1" x="-0.165" as="geometry">
+            <mxPoint y="1" as="offset" />
+            <Array as="points">
+              <mxPoint x="546" y="290" />
+              <mxPoint x="547.5" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_eng_index" edge="1" parent="1" source="c_engine" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=0;endArrow=open;strokeColor=#d97706;strokeWidth=1.5;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.43;entryY=1;entryDx=0;entryDy=0;" target="c_index">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_eng_pool" edge="1" parent="1" source="c_engine" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#2563eb;strokeWidth=1.5;fontSize=10;fontColor=#1d4ed8;labelBackgroundColor=#ffffff;exitX=0.966;exitY=-0.006;exitDx=0;exitDy=0;entryX=0.4;entryY=1;entryDx=0;entryDy=0;exitPerimeter=0;" target="c_threadpool" value="«creates»">
+          <mxGeometry relative="1" x="-0.4522" y="-10" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="845.6" y="580" />
+              <mxPoint x="1057" y="580" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_eng_tok" edge="1" parent="1" source="c_engine" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=1;endArrow=open;strokeColor=#9333ea;strokeWidth=1.5;exitX=0.91;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="c_tokenizer">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="814" y="550" />
+              <mxPoint x="1272" y="550" />
+              <mxPoint x="1272" y="150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_eng_ollama" edge="1" parent="1" source="c_engine_attrs" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=0;endArrow=open;strokeColor=#9333ea;strokeWidth=1.5;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="c_ollama">
+          <mxGeometry relative="1" x="0.0613" as="geometry">
+            <Array as="points">
+              <mxPoint x="1160" y="711" />
+              <mxPoint x="1160" y="578" />
+              <mxPoint x="1495" y="578" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_ctrl_eng" edge="1" parent="1" source="c_controller" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=0;endArrow=open;strokeColor=#475569;strokeWidth=1.5;exitX=0;exitY=0.435;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="c_engine">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_ctrl_pool" edge="1" parent="1" source="c_controller" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=1;endArrow=open;strokeColor=#2563eb;strokeWidth=1.5;fontSize=10;fontColor=#1d4ed8;labelBackgroundColor=#ffffff;exitX=0;exitY=0.15;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="c_threadpool" value="ws_pool_">
+          <mxGeometry relative="1" x="-0.58" y="-12" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1248" y="691" />
+              <mxPoint x="1248" y="266" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_eng_weighted" edge="1" parent="1" source="c_engine" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#d97706;strokeWidth=1.5;exitX=0;exitY=0.48;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="c_weighted">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_eng_idxres" edge="1" parent="1" source="c_engine" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#d97706;strokeWidth=1.5;exitX=0.1;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="c_index_res">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="352" y="954" />
+              <mxPoint x="165" y="954" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_eng_searchres" edge="1" parent="1" source="c_engine" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#d97706;strokeWidth=1.5;exitX=0.267;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="c_search_res">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_searchres_doc" edge="1" parent="1" source="c_search_res" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=1;endArrow=open;strokeColor=#d97706;strokeWidth=1.5;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="c_docmatch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_eng_statsres" edge="1" parent="1" source="c_engine" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#d97706;strokeWidth=1.5;exitX=0.9;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="c_stats_res">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="808" y="954" />
+              <mxPoint x="1015" y="954" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

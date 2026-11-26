@@ -1,0 +1,120 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0">
+  <diagram id="use_case_diag_v6" name="Use Case Diagram">
+    <mxGraphModel dx="1493" dy="764" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="930" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;fontColor=#0f172a;" value="Use Case Diagram: Функціональні сценарії паралельної пошукової системи" vertex="1">
+          <mxGeometry height="30" width="840" x="280" y="15" as="geometry" />
+        </mxCell>
+        <mxCell id="sys_box" parent="1" style="shape=rect;html=1;verticalAlign=top;fontStyle=1;whiteSpace=wrap;align=center;fillColor=#f8fafc;strokeColor=#475569;strokeWidth=2;dashed=1;fontSize=13;fontColor=#0f172a;arcSize=3;spacingTop=8;" value="Паралельна пошукова система з LLM (Search Server Backend)" vertex="1">
+          <mxGeometry height="835" width="840" x="280" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="act_web_user" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#e0f2fe;strokeColor=#0284c7;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#0f172a;" value="Клієнт&lt;br&gt;Web UI" vertex="1">
+          <mxGeometry height="95" width="55" x="125" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="act_cli_user" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#0f172a;" value="Клієнт&lt;br&gt;CLI / REST" vertex="1">
+          <mxGeometry height="95" width="55" x="125" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="act_base_user" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f1f5f9;strokeColor=#475569;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#0f172a;" value="Користувач&lt;br&gt;(спільні дії)" vertex="1">
+          <mxGeometry height="95" width="55" x="125" y="662" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ollama" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f3e8ff;strokeColor=#9333ea;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#0f172a;" value="Зовнішній сервіс&lt;br&gt;Ollama LLM&lt;br&gt;(qwen2.5:0.5b)" vertex="1">
+          <mxGeometry height="95" width="55" x="1255" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_ws_search" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#bae6fd;strokeColor=#0284c7;strokeWidth=2;fontStyle=1;fontSize=11.5;fontColor=#0369a1;" value="Виконати інтерактивний пошук&lt;br&gt;зі стрімінгом етапів&lt;br&gt;(/ws/search)" vertex="1">
+          <mxGeometry height="85" width="275" x="325" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_rest_search" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=11.5;fontColor=#b45309;" value="Виконати пошук через REST API&lt;br&gt;(POST /api/search:&lt;br&gt;mode = keyword | expanded)" vertex="1">
+          <mxGeometry height="85" width="275" x="325" y="355" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_query_exp" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;strokeWidth=2;fontStyle=1;fontSize=11.5;fontColor=#6b21a8;" value="Розширити пошуковий запит&lt;br&gt;через LLM (Query Expansion&lt;br&gt;з fallback при таймауті)" vertex="1">
+          <mxGeometry height="85" width="270" x="810" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_index_search" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;fontStyle=1;fontSize=11.5;fontColor=#15803d;" value="Виконати пошук в інвертованому&lt;br&gt;індексі (64 шарди) та&lt;br&gt;TF-IDF ранжування" vertex="1">
+          <mxGeometry height="85" width="270" x="810" y="355" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_build_index" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e2e8f0;strokeColor=#475569;strokeWidth=2;fontStyle=1;fontSize=11.5;fontColor=#1e293b;" value="Запустити паралельну побудову&lt;br&gt;індексу з threads = N&lt;br&gt;(POST /api/index)" vertex="1">
+          <mxGeometry height="85" width="275" x="325" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_stats" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e2e8f0;strokeColor=#475569;strokeWidth=2;fontStyle=1;fontSize=11.5;fontColor=#1e293b;" value="Отримати статистику індексації&lt;br&gt;та стану системи&lt;br&gt;(GET /api/stats)" vertex="1">
+          <mxGeometry height="76" width="275" x="325" y="672" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_health" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e2e8f0;strokeColor=#475569;strokeWidth=2;fontStyle=1;fontSize=11.5;fontColor=#1e293b;" value="Перевірити працездатність&lt;br&gt;сервера та доступність Ollama&lt;br&gt;(GET /api/health)" vertex="1">
+          <mxGeometry height="78" width="275" x="325" y="782" as="geometry" />
+        </mxCell>
+        <mxCell id="gen_web_base" edge="1" parent="1" source="act_web_user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;endSize=10;strokeColor=#0284c7;strokeWidth=1.6;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.38;entryDx=0;entryDy=0;entryPerimeter=0;" target="act_base_user">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="45" y="158" />
+              <mxPoint x="45" y="698" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gen_cli_base" edge="1" parent="1" source="act_cli_user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;endSize=10;strokeColor=#d97706;strokeWidth=1.6;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.62;entryDx=0;entryDy=0;entryPerimeter=0;" target="act_base_user">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="75" y="398" />
+              <mxPoint x="75" y="721" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_web_ws" edge="1" parent="1" source="act_web_user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#0284c7;strokeWidth=1.6;" target="uc_ws_search">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_cli_search" edge="1" parent="1" source="act_cli_user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#d97706;strokeWidth=1.6;" target="uc_rest_search">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_base_index" edge="1" parent="1" source="act_base_user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#475569;strokeWidth=1.6;" target="uc_build_index">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="235" y="710" />
+              <mxPoint x="235" y="592" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_base_stats" edge="1" parent="1" source="act_base_user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#475569;strokeWidth=1.6;" target="uc_stats">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_base_health" edge="1" parent="1" source="act_base_user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#475569;strokeWidth=1.6;" target="uc_health">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="235" y="710" />
+              <mxPoint x="235" y="821" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="inc_ws_qe" edge="1" parent="1" source="uc_ws_search" style="html=1;verticalAlign=bottom;labelBackgroundColor=#f8fafc;endArrow=open;endFill=0;dashed=1;strokeColor=#475569;strokeWidth=1.5;fontStyle=2;fontSize=11;" target="uc_query_exp" value="«include»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inc_rest_index" edge="1" parent="1" source="uc_rest_search" style="html=1;verticalAlign=bottom;labelBackgroundColor=#f8fafc;endArrow=open;endFill=0;dashed=1;strokeColor=#475569;strokeWidth=1.5;fontStyle=2;fontSize=11;" target="uc_index_search" value="«include»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inc_ws_index" edge="1" parent="1" source="uc_ws_search" style="html=1;labelBackgroundColor=#f8fafc;endArrow=open;endFill=0;dashed=1;strokeColor=#475569;strokeWidth=1.5;fontStyle=2;fontSize=11;exitX=0.84;exitY=0.92;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.16;entryY=0.08;entryDx=0;entryDy=0;entryPerimeter=0;" target="uc_index_search" value="«include»">
+          <mxGeometry relative="1" x="-0.48" y="-12" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ext_qe_rest" edge="1" parent="1" source="uc_query_exp" style="html=1;labelBackgroundColor=#f8fafc;endArrow=open;endFill=0;dashed=1;strokeColor=#9333ea;strokeWidth=1.5;fontStyle=2;fontSize=10.5;fontColor=#6b21a8;jumpStyle=arc;jumpSize=8;exitX=0.16;exitY=0.92;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.84;entryY=0.08;entryDx=0;entryDy=0;entryPerimeter=0;" target="uc_rest_search" value="«extend»&lt;br&gt;[mode = expanded]">
+          <mxGeometry relative="1" x="-0.46" y="-18" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_ollama_qe" edge="1" parent="1" source="uc_query_exp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#9333ea;strokeWidth=1.6;fontSize=10;fontColor=#6b21a8;labelBackgroundColor=#ffffff;" target="act_ollama" value="POST /api/generate">
+          <mxGeometry relative="1" x="-0.05" y="12" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_ollama_health" edge="1" parent="1" source="uc_health" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#9333ea;strokeWidth=1.4;fontSize=10;fontColor=#6b21a8;labelBackgroundColor=#f8fafc;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.82;entryDx=0;entryDy=0;entryPerimeter=0;" target="act_ollama" value="GET /api/tags">
+          <mxGeometry relative="1" x="-0.55" y="12" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1185" y="821" />
+              <mxPoint x="1185" y="188" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

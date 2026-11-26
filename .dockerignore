@@ -1,5 +1,6 @@
 build/
 out/
+diagrams/
 cmake-build-*/
 data/
 docs/

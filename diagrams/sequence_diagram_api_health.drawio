@@ -1,0 +1,109 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0">
+  <diagram id="seq_api_health_v2" name="Sequence Diagram - Healthcheck">
+    <mxGraphModel dx="1150" dy="620" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1150" pageHeight="620" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Заголовок -->
+        <mxCell id="title" value="Sequence Diagram: Перевірка працездатності сервера та Ollama (GET /api/health)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;fontColor=#0f172a;" vertex="1" parent="1">
+          <mxGeometry x="150" y="20" width="850" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== LIFELINES ==================== -->
+        <mxCell id="ll_client" value="CLI / Web Клієнт" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="50" y="70" width="150" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="act_client" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#fef3c7;strokeColor=#d97706;" vertex="1" parent="ll_client">
+          <mxGeometry x="65" y="55" width="20" height="395" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ll_ctrl" value="ServerController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#f1f5f9;strokeColor=#475569;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="300" y="70" width="150" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#cbd5e1;strokeColor=#475569;" vertex="1" parent="ll_ctrl">
+          <mxGeometry x="65" y="55" width="20" height="395" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ll_eng" value="SearchEngine" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#fffbeb;strokeColor=#d97706;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="550" y="70" width="150" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="act_eng" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#fef3c7;strokeColor=#d97706;" vertex="1" parent="ll_eng">
+          <mxGeometry x="65" y="105" width="20" height="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ll_ollama" value="OllamaClient" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#faf5ff;strokeColor=#9333ea;strokeWidth=1.5;fontStyle=1;fontSize=11;size=40;" vertex="1" parent="1">
+          <mxGeometry x="800" y="70" width="150" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ollama" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#e9d5ff;strokeColor=#9333ea;" vertex="1" parent="ll_ollama">
+          <mxGeometry x="65" y="150" width="20" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== MESSAGES ==================== -->
+        <mxCell id="msg1" value="1: GET /api/health" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#0f172a;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="135" y="135" as="sourcePoint" />
+            <mxPoint x="365" y="135" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg2" value="2: Перевірка стану залежностей" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#d97706;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="385" y="180" as="sourcePoint" />
+            <mxPoint x="615" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg3" value="3: Перевірка доступності LLM (ping)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeColor=#9333ea;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="635" y="225" as="sourcePoint" />
+            <mxPoint x="865" y="225" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg4" value="4: HTTP GET /api/tags&lt;br&gt;(без блокування llm_mutex_)" style="html=1;align=left;spacingLeft=6;endArrow=block;rounded=0;strokeColor=#6b21a8;strokeWidth=1.2;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="885" y="252" as="sourcePoint" />
+            <mxPoint x="885" y="292" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="918" y="252" />
+              <mxPoint x="918" y="292" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg5" value="5: true / false (доступність Ollama)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;rounded=0;strokeColor=#9333ea;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="865" y="340" as="sourcePoint" />
+            <mxPoint x="635" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg6" value="6: bool (статус Ollama)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;rounded=0;strokeColor=#d97706;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="615" y="385" as="sourcePoint" />
+            <mxPoint x="385" y="385" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg7" value="7: Формування JSON-відповіді" style="html=1;align=left;spacingLeft=6;endArrow=block;rounded=0;strokeColor=#475569;strokeWidth=1.2;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="385" y="415" as="sourcePoint" />
+            <mxPoint x="385" y="445" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="418" y="415" />
+              <mxPoint x="418" y="445" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg8" value="8: 200 OK JSON&lt;br&gt;{&quot;status&quot;: &quot;ok&quot;, &quot;ollama&quot;: true|false}" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;rounded=0;strokeColor=#0f172a;strokeWidth=1.5;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="365" y="500" as="sourcePoint" />
+            <mxPoint x="135" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
