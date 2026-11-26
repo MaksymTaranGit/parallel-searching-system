@@ -24,7 +24,7 @@ services:
           sleep 1
         done
         echo "Pulling model qwen2.5:0.5b..."
-        ollama pull qwen2.5:0.5b
+        ollama pull "${OLLAMA_MODEL:-qwen2.5:0.5b}"
         echo "Model is ready."
     networks:
       - search-network

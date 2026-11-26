@@ -6,7 +6,8 @@ dist/
 .idea/
 build/
 cmake-build-*/
-data/
+data/*
+!data/.gitkeep
 .vscode/
 *.exe
 *.o
